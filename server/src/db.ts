@@ -3,7 +3,7 @@ import config from './config'
 let db : Db;
 
 async function connect() : Promise<Db> {
-    const client = new MongoClient(config.MONGO_URI,{
+    const client = await MongoClient.connect(config.MONGO_URI,{
         ignoreUndefined: true
     })
     console.log("✅ : database connected")
