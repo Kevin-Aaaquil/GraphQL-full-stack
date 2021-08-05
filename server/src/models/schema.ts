@@ -1,5 +1,5 @@
-import   {graphql, GraphQLID, GraphQLInt, GraphQLList, GraphQLObjectType,GraphQLSchema, GraphQLString } from "graphql";
-import { resolve } from "path/posix";
+import   {graphql, GraphQLID, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType,GraphQLSchema, GraphQLString } from "graphql";
+import { ObjectId } from "mongodb";
 // import _ from 'lodash'
 import DB from '../db'
 
@@ -14,7 +14,7 @@ const BookType = new GraphQLObjectType({
             type : AuthorType,
             resolve(parent, args){
                // return _.find(authors,{id : parent.authorID})
-             return  DB().then(DB => DB.collection("authors").find({_id : parent.authorID})).then(async (data)  =>{ return await data.toArray()})
+             return  DB().then(DB => DB.collection("authors").findOne({"_id" : new ObjectId(parent.authorID)}))
             }
         }
     })
@@ -30,7 +30,7 @@ const AuthorType = new GraphQLObjectType({
             type : GraphQLList(BookType),
             resolve(parent,args){
               //  return _.filter(books,{authorID : parent.id})
-              return DB().then(DB => DB.collection("books").find({authorID : parent._id})).then(async (data) => {return await  data.toArray()})
+              return DB().then(DB => DB.collection("books").find({authorID : parent._id.toString()})).then(async (data) => {return await  data.toArray()})
             }
         }
     })
@@ -46,7 +46,7 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args){
                 // code to get data from db
                //return _.find(books,{id : args.id})
-               return DB().then(DB => DB.collection("books").findOne({_id : args._id}))
+               return DB().then(DB => DB.collection("books").findOne({"_id" : new ObjectId(args._id)}))
             //    .then(async (data) => {return await  data.toArray()})
             }
         },
@@ -56,7 +56,7 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args){
                // return _.find(authors, {id : args.id})
             //    return DB().then(DB => DB.collection("authors").find({id : args.id})).then(async (data) => {return (await data.toArray())})
-               return DB().then(DB => DB.collection("authors").findOne({_id : args._id}))
+               return DB().then(DB => DB.collection("authors").findOne({"_id" : new ObjectId(args._id)}))
             //    .then(async (data) => {return await  data.toArray()})
             }
         },
@@ -83,24 +83,24 @@ const Mutation = new GraphQLObjectType({
         addAuthor : {
             type : AuthorType,
             args : {
-                name : {type : GraphQLString},
-                age : {type : GraphQLInt},
+                name : {type : new GraphQLNonNull (GraphQLString)},
+                age : {type : new GraphQLNonNull (GraphQLInt)},
             },
            resolve(parent,args){
                 let author = {
                     name : args.name,
                     age : args.age
                 }
-              return  DB().then(DB => DB.collection("authors").insertOne(author)).then(async (data) => {if(data.acknowledged) return author})
+              return  DB().then(DB => DB.collection("authors").insertOne(author)).then(async (data) => {if(data.acknowledged) return await (await DB()).collection("authors").findOne({name : author.name})})
             }
         },
 
         addBook : {
             type : BookType,
             args : {
-                name : {type : GraphQLString},
-                main : {type : GraphQLString},
-                authorID : {type : GraphQLID}
+                name : {type : new GraphQLNonNull (GraphQLString)},
+                main : {type : new GraphQLNonNull (GraphQLString)},
+                authorID : {type : new GraphQLNonNull (GraphQLID)}
             },
             resolve(parent,args){
                 let book = {
@@ -108,7 +108,7 @@ const Mutation = new GraphQLObjectType({
                     main : args.main,
                     authorID : args.authorID
                 }
-                return DB().then(DB => DB.collection("books").insertOne(book).then(async(data)=>{if(data.acknowledged) return book}))
+                return DB().then(DB => DB.collection("books").insertOne(book)).then(async(data)=>{if(data.acknowledged) return await (await DB()).collection("books").findOne({name : book.name})})
             }
         }
     }
