@@ -1,4 +1,4 @@
-AUTHORS = [
+{"AUTHORS" : [
   {
     "_id": "610afecadaa855ad1a556d46",
     "name": "Rick Riordan",
@@ -17,10 +17,10 @@ AUTHORS = [
     "age": 35,
     "id": "3"
   }
-]
+],
 
 
-BOOKS = [
+"BOOKS" : [
   {
     "_id": "610afecadaa855ad1a556d38",
     "name": "Percy Jakson & Olympians",
@@ -120,3 +120,4 @@ BOOKS = [
     "id": "14"
   }
 ]
+}
