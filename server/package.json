@@ -7,7 +7,7 @@
     "start": "node build/app.js",
     "build": "tsc",
     "dev": "tsc-watch --onSuccess \"node ./build/app.js\"",
-    "clean": "rm -rf package-lock.json node_modules && yarn add",
+    "clean": "rm -rf package-lock.json node_modules && yarn add all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
