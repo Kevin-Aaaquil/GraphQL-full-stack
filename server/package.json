@@ -4,10 +4,10 @@
   "description": "this is the backend section of the graphql-fullstack project, This was made to learn and utilize graphql using freecodecamp course",
   "main": "index.js",
   "scripts": {
-    "start": "node build/index.js",
+    "start": "node build/app.js",
     "build": "tsc",
     "dev": "tsc-watch --onSuccess \"node ./build/app.js\"",
-    "clean": "rm -rf package-lock.json node_modules && npm install",
+    "clean": "rm -rf package-lock.json node_modules && yarn add",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Kevin-Aaaquil/GraphQL-full-stack#readme",
   "dependencies": {
+    "all": "^0.0.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
