@@ -5,10 +5,12 @@ function App() {
   const [counter, setCounter] = useState(0)
   return (
     <div className="App">
-      <div>{counter}</div>
-      <div><button onClick= {()=>{
-        setCounter(counter+1);
-      }}>Click to Increase Counter</button></div>
+      <h1>React</h1>
+      <div>Counter : {counter}</div>
+      <br />
+      <div><button className="button" onClick={()=>{
+        setCounter(counter+1)
+      }}>Click to increase counter</button></div>
     </div>
   );
 }
