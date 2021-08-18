@@ -13,7 +13,6 @@ const BookType = new GraphQLObjectType({
         author : {
             type : AuthorType,
             resolve(parent, args){
-               // return _.find(authors,{id : parent.authorID})
              return  DB().then(DB => DB.collection("authors").findOne({"_id" : new ObjectId(parent.authorID)}))
             }
         }
@@ -29,7 +28,6 @@ const AuthorType = new GraphQLObjectType({
         books : { 
             type : GraphQLList(BookType),
             resolve(parent,args){
-              //  return _.filter(books,{authorID : parent.id})
               return DB().then(DB => DB.collection("books").find({authorID : parent._id.toString()})).then(async (data) => {return await  data.toArray()})
             }
         }
